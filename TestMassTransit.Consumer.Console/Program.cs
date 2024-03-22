@@ -1,3 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
+using TestMassTransit.Consumer.Console.Consumers;
 
-Console.WriteLine("Hello, World!");
+var services = new ServiceCollection();
+
+services.AddMassTransit(x =>
+{
+    x.AddConsumer<SendMessageConsumer>();
+    
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
